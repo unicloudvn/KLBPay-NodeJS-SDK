@@ -15,9 +15,9 @@ export default class Payment {
   private encryptKey: string;
   private security = new Security();
 
-  constructor( clientId: string, encrypt: string, secretKey: string) {
+  constructor( clientId: string, encryptKey: string, secretKey: string) {
     this.clientId = clientId;
-    this.encryptKey = encrypt;
+    this.encryptKey = encryptKey;
     this.secretKey = secretKey;
   }
   private async excute<T,S> (url: string, data: T): Promise<S> {
