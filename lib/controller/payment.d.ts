@@ -1,17 +1,12 @@
-import { CheckPaymentRequest, CreatePaymentRequest } from '../model';
-import Security from '../service/security';
+import { CancelPaymentRequest, CancelPaymentResponse, CheckPaymentRequest, CheckPaymentResponse, CreatePaymentRequest, CreatePaymentResponse } from '../model';
 export default class Payment {
-    secretKey: string;
-    clientId: string;
-    encryptKey: string;
-    security: Security;
-    timestamp: number;
-    BASE_URL: string;
-    ENDPOINT_CREATE: string;
-    ENDPOINT_CHECK: string;
-    ENDPOINT_CANCEL: string;
-    constructor(secretKey: string, clientId: string, encrypt: string);
-    create: (data: CreatePaymentRequest) => Promise<string | null>;
-    check: (data: CheckPaymentRequest) => Promise<string | null>;
-    cancel: (data: CanPlayTypeResult) => Promise<string | null>;
+    private secretKey;
+    private clientId;
+    private encryptKey;
+    private security;
+    constructor(clientId: string, encrypt: string, secretKey: string);
+    private excute;
+    create: (data: CreatePaymentRequest) => Promise<CreatePaymentResponse>;
+    check: (data: CheckPaymentRequest) => Promise<CheckPaymentResponse>;
+    cancel: (data: CancelPaymentRequest) => Promise<CancelPaymentResponse>;
 }

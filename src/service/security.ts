@@ -2,7 +2,6 @@ import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
 
 export default class Security {
   public genarateSign(data: string, clientId: string, timestamp: number, secretKey: string): string {
-    // data ma hoa
     const message = `${clientId}|${timestamp}|${data}`;
     const alg = 'sha256';
     const cipher = createHmac(alg, secretKey);
