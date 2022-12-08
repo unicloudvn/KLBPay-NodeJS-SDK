@@ -43,6 +43,9 @@ export default class Payment {
     const dataValidate = response.headers['x-api-validate'] as string;
     const timeResponse = Number(response.headers['x-api-time']);
     const responseData = response.data;
+    if (client !== this.clientId) {
+      throw new CustomError(ResponseCode.INVALID_CLIENT_ID.getCode(), ResponseCode.INVALID_CLIENT_ID.getMessage());
+    }
     if (responseData.code !== 0) {
       throw new CustomError(responseData.code, responseData.message);
     }
