@@ -1,8 +1,9 @@
 name: kpay-nodejs-sdk
 
 on:
-  release:
-    types: [publish]
+  push:
+    branches:
+      - main
 
 jobs:
   build:
