@@ -1,6 +1,6 @@
 {
-  "name": "kpay-nodejs-sdk",
-  "version": "1.0.0",
+  "name": "@unicloud/kpay-nodejs-sdk",
+  "version": "1.0.1",
   "description": "kpay-nodejs-sdk",
   "main": "lib/index.js",
   "files": [
@@ -19,7 +19,10 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@git.sunshinetech.vn:research-team/common/kpay-nodejs-sdk.git"
+    "url": "https://github.com/taiwd123/sdk-klb.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
     "axios": "^1.2.0",

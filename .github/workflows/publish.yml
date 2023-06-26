@@ -1,22 +1,11 @@
-name: kpay-nodejs-sdk
+name: Node.js Package
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [deploy]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
-
-  publish-gpr:
+  deploy:
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -28,7 +17,6 @@ jobs:
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish
+      - run: npm run build && npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.ACCESS_KEY}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
