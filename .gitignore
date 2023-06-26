@@ -21,5 +21,11 @@ pnpm-lock.yaml
 functions/*
 .temp/**
 
+*.env
+*.js
+*.js.map
+*.d.ts
+**/lib
+lib/**
 
 build
