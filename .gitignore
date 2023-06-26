@@ -27,5 +27,6 @@ functions/*
 *.d.ts
 **/lib
 lib/**
+*.npmrc
 
 build
