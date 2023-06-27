@@ -1,10 +1,10 @@
-export interface BaseResponse<T> {
+type BaseResponse<T> = {
   code: number;
   data: T;
   message: string;
-}
+};
 
-export interface CreatePaymentResponse {
+type CreatePaymentResponse = {
   refTransactionId: string;
   amount: number;
   description: string;
@@ -21,14 +21,16 @@ export interface CreatePaymentResponse {
   failUrl: string;
   redirectAfter: number;
   bankAccountId: string;
-}
+};
 
-export interface CheckPaymentResponse {
+type CheckPaymentResponse = {
   status: string;
   refTransactionId: string;
   amount: number;
-}
+};
 
-export interface CancelPaymentResponse {
+type CancelPaymentResponse = {
   status: boolean;
-}
+};
+
+export { BaseResponse, CancelPaymentResponse, CheckPaymentResponse, CreatePaymentResponse };

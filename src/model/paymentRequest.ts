@@ -1,4 +1,4 @@
-export interface CreatePaymentRequest {
+type CreatePaymentRequest = {
   refTransactionId: string;
   amount: number;
   description: string;
@@ -15,12 +15,13 @@ export interface CreatePaymentRequest {
   failUrl: string;
   redirectAfter: number;
   bankAccountId?: string;
-}
+};
 
-export interface CheckPaymentRequest {
+type CheckPaymentRequest = {
   transactionId: string;
-}
+};
 
-export interface CancelPaymentRequest {
+type CancelPaymentRequest = {
   transactionId: string;
-}
+};
+export { CancelPaymentRequest, CheckPaymentRequest, CreatePaymentRequest };
