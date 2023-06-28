@@ -1,2 +1,3 @@
 import Payment from './controller/payment';
-export { Payment };
+import * as Model from './model';
+export { Payment, Model };
