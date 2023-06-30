@@ -1,63 +1,59 @@
-# KPAY SDK
+# KPAY SDK Node JS
 
-## Install
+Thư viện người dùng tích hợp KLBPay vào hệ thống thanh toán của Merchant
 
-Create file .npmrc in root folder with content below:
+# Install
+
+Tạo file .npmrc trong thư mục root với nội dung bên dưới:
 
 ```
 @unicloudvn:registry=https://npm.pkg.github.com/unicloudvn
 //npm.pkg.github.com/:_authToken=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
 ```
 
-After
+Sau đó tiến hành cài đặt
 
 ```
-# install package locally (recommend)
+# Để cài đặt sử dụng lệnh
 npm install @unicloudvn/kpay-nodejs-sdk
-OR
+Hoặc
 npm install @unicloudvn/kpay-nodejs-sdk --save-dev
 ```
 
-## Usage
+# Usage
 
-<h3 id="get-key"> Get keys from <a href = "https://pay-staging.kienlongbank.co/">Klb Pay Portal</a> </h3>
+<h3 id="get-key">Lấy thông tin tích hợp từ: <a href = "https://mc.kienlongbank.com/">Klb Pay Portal</a> </h3>
 
 ```
-Host = https://api-staging.kienlongbank.co/pay
-EncryptKey = "4EDDEB54E83AFB428AA1184816AC9F9242DEBE24C1ACAF935427E16A06B4181A";
-ClientId = "ffbc53eb-0191-4ba2-a68a-5eeeccf51428";
-ClientId = "y4ULpoFcK7Cb1l4OBh364qZ5wSkMjtJCW4FtFZfbil9rzjs4bn9eWbdJuGLWaGp9eEHB/HU7k9PSwc7J4wjbGZnDIfb/1e6htG9NtduklhH5R8FQLRwxWnRmXlnqcUgPg/K+AxaXdplfXox2vMxwLoLNwr+Qo7wGDATBl/C+cdXgdnYeNQmAxCrUBKKKxjWXFqP2wcxM7JYhF7k85o4EKIRJwJnQmGjM6ZKaz4294M6wDWvK0NruHUqN+wYRAXnH5SrcK+k88DJBIx+o9BipAWulINA3+mOVAHLJ7VAJXD4Hg1YB73uhozGZxrMzpS+T+iW035JbOvNd6GS4MfFNJA==";
+Thông tin tích hợp bao gồm: Host, ClientId, SecretKey, EncryptKey
 ```
 
-### Import kpay-sdk
+## Import sử dụng kpay-sdk
 
 ```
 import {Payment} from 'kpay-nodejs-sdk';
 ```
 
-### Example create new Object Payment
-
-### [Keys were gotten above: CLIENT_ID, ENCRYPT_KEY, SECRET_KEY](#get-key)
+## Ví dụ cơ bản
 
 ```
-import {Payment} from 'kpay-nodejs-sdk';
-
-// create via constructor
+// tạo thông qua consctructor
 const payment = new Payment(clientId, encryptKey, secretKey, host);
 
-OR
+Hoặc
 
-// create via environment variables - file .env contains variable below
-KLB_HOST = "https://api-staging.kienlongbank.co/pay"
-ENCRYPT_KEY = "4EDDEB54E83AFB428AA1184816AC9F9242DEBE24C1ACAF935427E16A06B4181A"
-CLIENT_ID = "ffbc53eb-0191-4ba2-a68a-5eeeccf51428"
-SECRET_KEY = "y4ULpoFcK7Cb1l4OBh364qZ5wSkMjtJCW4FtFZfbil9rzjs4bn9eWbdJuGLWaGp9eEHB/HU7k9PSwc7J4wjbGZnDIfb/1e6htG9NtduklhH5R8FQLRwxWnRmXlnqcUgPg/K+AxaXdplfXox2vMxwLoLNwr+Qo7wGDATBl/C+cdXgdnYeNQmAxCrUBKKKxjWXFqP2wcxM7JYhF7k85o4EKIRJwJnQmGjM6ZKaz4294M6wDWvK0NruHUqN+wYRAXnH5SrcK+k88DJBIx+o9BipAWulINA3+mOVAHLJ7VAJXD4Hg1YB73uhozGZxrMzpS+T+iW035JbOvNd6GS4MfFNJA=="
+// tạo thông qua biến môi trường từ file .env
+KLB_HOST = Host
+ENCRYPT_KEY = EncryptKey
+CLIENT_ID = ClientId
+SECRET_KEY = SecretKey
 ```
 
-### Create new payment:
+### Tạo giao dịch với JavaScript
+
+#### Request data
 
 ```
-# Declare data
 const data = {
     refTransactionId: "123456",
     amount: 123,
@@ -85,7 +81,7 @@ const create = payment.create(data).then(res => {
 })
 ```
 
-### Response create payment
+#### Response data
 
 ```
 {
@@ -103,10 +99,11 @@ const create = payment.create(data).then(res => {
 }
 ```
 
-### Check status payment
+### Kiểm tra trạng thái giao dịch
+
+#### Request data
 
 ```
-# Declare data
 const data = {
     transactionId: '6db5cf6e-e952-4ab5-8c55-aa82400fdd35'
 }
@@ -119,7 +116,7 @@ const check = payment.check(data).then(res => {
 })
 ```
 
-### Response check status payment
+#### Response data
 
 ```
 {
@@ -129,10 +126,11 @@ const check = payment.check(data).then(res => {
 }
 ```
 
-### Cancel payment
+### Huỷ giao dịch
+
+#### Request data
 
 ```
-# Declare data
 const data = {
     transactionId: '6db5cf6e-e952-4ab5-8c55-aa82400fdd35'
 }
@@ -145,7 +143,113 @@ const cancel = payment.cancel(data).then(res => {
 })
 ```
 
-### Response cancel payment
+#### Response data
+
+```
+{ success: true }
+```
+
+### Tạo giao dịch với TypeScript
+
+Cần import thêm Model từ sdk
+
+```
+import {Payment, Model} from 'kpay-nodejs-sdk';
+```
+
+#### Request data: Model.CreatePaymentRequest
+
+```
+const data: Model.CreatePaymentRequest = {
+    refTransactionId: "123456",
+    amount: 123,
+    description: "Mo ta thanh toan",
+    timeout: 10000,
+    title: "Thanh Toan",
+    language: "Viet Nam",
+    customerInfo: {
+      fullName: "Nguyen Van A",
+      email: "email@gmail.com",
+      phone: "0123456789",
+      address: "Ho Chi Minh"
+    },
+    successUrl: "https://success.example.com.vn",
+    failUrl: "https://fail.example.com.vn",
+    redirectAfter: 5,
+}
+
+
+const create = payment.create(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+    // handle error response
+})
+```
+
+#### Response data: Model.CreatePaymentResponse
+
+```
+{
+    transactionId: '6db5cf6e-e952-4ab5-8c55-aa82400fdd35',
+    refTransactionId: '123456',
+    payLinkCode: 'QCg8oFIf',
+    timeout: 10000,
+    url: 'https://pay-staging.kienlongbank.co/paylink/QCg8oFIf',
+    virtualAccount: '10372212086747084',
+    description: 'Mo ta thanh toan',
+    amount: 123,
+    qrCodeString: '00020101021238610010A000000727013100069704520117103722120867470840208QRIBFTTA530370454031235802VN62220818TT Don hang 12345663046352',
+    status: 'CREATED',
+    time: '2022-12-08T15:12:28.967953'
+}
+```
+
+### Kiểm tra trạng thái giao dịch: Model.CheckPaymentRequest
+
+#### Request data
+
+```
+const data: Model.CheckPaymentRequest = {
+    transactionId: '6db5cf6e-e952-4ab5-8c55-aa82400fdd35'
+}
+
+const check = payment.check(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+    // handle error response
+})
+```
+
+#### Response data: Model.CheckPaymentResponse
+
+```
+{
+    status: 'CREATED',
+    refTransactionId: '123456',
+    amount: 123
+}
+```
+
+### Huỷ giao dịch
+
+#### Request data: Model.CancelPaymentRequest
+
+```
+const data: Model.CancelPaymentRequest = {
+    transactionId: '6db5cf6e-e952-4ab5-8c55-aa82400fdd35'
+}
+
+const cancel = payment.cancel(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+    // handle error response
+})
+```
+
+#### Response data: Model.CancelPaymentResponse
 
 ```
 { success: true }
