@@ -15,6 +15,7 @@ type CreatePaymentRequest = {
   failUrl: string;
   redirectAfter: number;
   bankAccountId?: string;
+  paymentType?: string;
 };
 
 type CheckPaymentRequest = {
@@ -24,4 +25,23 @@ type CheckPaymentRequest = {
 type CancelPaymentRequest = {
   transactionId: string;
 };
-export { CancelPaymentRequest, CheckPaymentRequest, CreatePaymentRequest };
+
+type BodyEncryptRequest = {
+  data: string;
+};
+
+type NotifyRequest = {
+  transactionId?: string;
+  refTransactionId?: string;
+  virtualAccount?: string;
+  actualAccount?: string;
+  fromBin?: string;
+  fromAccount?: string;
+  success?: boolean;
+  amount?: number;
+  statusCode?: string;
+  txnNumber?: string;
+  transferDesc?: string;
+  time?: string;
+};
+export { CancelPaymentRequest, CheckPaymentRequest, CreatePaymentRequest, BodyEncryptRequest, NotifyRequest };

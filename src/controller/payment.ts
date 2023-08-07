@@ -17,7 +17,7 @@ export default class Payment {
   private readonly clientId: string;
   private readonly encryptKey: string;
   private readonly maxTimestampDiff: number;
-  private security = new Security();
+  private readonly security: Security;
 
   constructor(clientId?: string, encryptKey?: string, secretKey?: string, host?: string, maxTimestampDiff?: number) {
     this.host = host || KlbConfig.host;
@@ -25,10 +25,11 @@ export default class Payment {
     this.encryptKey = encryptKey || KlbConfig.encryptKey;
     this.secretKey = secretKey || KlbConfig.secretKey;
     this.maxTimestampDiff = maxTimestampDiff || 3000;
+    this.security = new Security(clientId, encryptKey, secretKey, host, maxTimestampDiff);
   }
 
   private async excute<T, S>(url: string, data: T): Promise<S> {
-    const message = this.encode(data);
+    const message = this.security.encode(data);
     const response = await axios.post(
       url,
       {
@@ -53,7 +54,7 @@ export default class Payment {
     }
 
     const messageResponse = new KlbMessage(client, timeResponse, dataValidate, responseData.data as string);
-    return this.decode<S>(messageResponse);
+    return this.security.decode<S>(messageResponse);
   }
 
   public async create(data: Model.CreatePaymentRequest) {
@@ -69,65 +70,5 @@ export default class Payment {
   public async cancel(data: Model.CancelPaymentRequest) {
     const url = this.host + ENDPOINT_CANCEL;
     return this.excute<Model.CancelPaymentRequest, Model.CancelPaymentResponse>(url, data);
-  }
-
-  private encode<T>(data: T): KlbMessage {
-    if (data === null || data === undefined) {
-      throw new CustomError(
-        ResponseCode.PAYMENT_TRANSACTION_FAILED.getCode(),
-        ResponseCode.PAYMENT_TRANSACTION_FAILED.getMessage(),
-      );
-    }
-    try {
-      const timestamp: number = Math.floor(Date.now());
-      const dataConvert = JSON.stringify(data);
-      const payload = this.security.aseEcrypt(dataConvert, this.encryptKey);
-      const apiValidate = this.security.genarateSign(payload, this.clientId, timestamp, this.secretKey);
-      return new KlbMessage(this.clientId, timestamp, apiValidate, payload);
-    } catch (e) {
-      throw new CustomError(
-        ResponseCode.PAYMENT_TRANSACTION_FAILED.getCode(),
-        ResponseCode.PAYMENT_TRANSACTION_FAILED.getMessage(),
-      );
-    }
-  }
-
-  private decode<T>(message: KlbMessage): T {
-    if (message.clientId !== this.clientId) {
-      throw new CustomError(
-        ResponseCode.PAYMENT_INVALID_CLIENT_ID.getCode(),
-        ResponseCode.PAYMENT_INVALID_CLIENT_ID.getMessage(),
-      );
-    }
-    const checkTime: number = Math.floor(Date.now()) - message.timestamp;
-    if (checkTime > this.maxTimestampDiff) {
-      throw new CustomError(
-        ResponseCode.PAYMENT_TRANSACTION_EXPIRED.getCode(),
-        ResponseCode.PAYMENT_TRANSACTION_EXPIRED.getMessage(),
-      );
-    }
-    try {
-      const validDate = this.security.verifySign(
-        message.encryptedData,
-        message.signature,
-        message.clientId,
-        message.timestamp,
-        this.secretKey,
-      );
-      if (validDate) {
-        const dateDecrypt = this.security.aseDecrypt(message.encryptedData, this.encryptKey);
-        const result: T = JSON.parse(dateDecrypt);
-        return result;
-      }
-    } catch (e) {
-      throw new CustomError(
-        ResponseCode.PAYMENT_SECURITY_VIOLATION.getCode(),
-        ResponseCode.PAYMENT_SECURITY_VIOLATION.getMessage(),
-      );
-    }
-    throw new CustomError(
-      ResponseCode.PAYMENT_SECURITY_VIOLATION.getCode(),
-      ResponseCode.PAYMENT_SECURITY_VIOLATION.getMessage(),
-    );
   }
 }

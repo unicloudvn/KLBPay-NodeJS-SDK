@@ -32,5 +32,8 @@ type CheckPaymentResponse = {
 type CancelPaymentResponse = {
   status: boolean;
 };
+type NotifyResponse = {
+  success: boolean;
+};
 
-export { BaseResponse, CancelPaymentResponse, CheckPaymentResponse, CreatePaymentResponse };
+export { BaseResponse, CancelPaymentResponse, CheckPaymentResponse, CreatePaymentResponse, NotifyResponse };
