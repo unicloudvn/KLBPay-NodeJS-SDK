@@ -70,6 +70,7 @@ const data = {
     successUrl: "https://success.example.com.vn",
     failUrl: "https://fail.example.com.vn",
     redirectAfter: 5,
+    paymentType: "VIET_QR"
 }
 
 
@@ -176,6 +177,7 @@ const data: Model.CreatePaymentRequest = {
     successUrl: "https://success.example.com.vn",
     failUrl: "https://fail.example.com.vn",
     redirectAfter: 5,
+    paymentType: "VIET_QR"
 }
 
 
@@ -253,6 +255,105 @@ const cancel = payment.cancel(data).then(res => {
 
 ```
 { success: true }
+```
+
+## Call Webhook
+
+### API này KienlongBank sẽ thực hiện gọi sang đối tác khi giao dịch thành công
+
+### Request Curl
+
+```
+curl --location --request GET '${YOUR_HOST}/notifyTransaction' \
+--header 'x-api-client: 5a404192-045b-4f6b-863f-192a0b9a88b4' \
+--header 'x-api-time: 1689925407435' \
+--header 'x-api-validate: 9757bbdbe1dc61e74cd8269126af130de9448e379d6bd12aed4443fea46cc5a0' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "data" :"qGckAOEvH9IqzQwxODueOmsMtLNUpVXdu/hbg0oPcV6K8ORAN2U/bGPC0OfrlyvN8h4mlCAIW3E94hFdiXGVv4bWbb4siQ5JSKuxQFw9lR/iiixcJ//RCFiGUY1cvkVx4zbpfIGchKGqEeay5wJZwy6V8YC/tvYqBN2zM/upfPQAlapxbvSF2ytW9AufUOe+TjPwe4xjVXx9x6/Ji8aB5sUCOeTzJ+j5D2YPtM6n8f25iUNgYN6eUhRm620aXDt1CmIhJYBUwa07kQN0UsxzC4Nq6FJVlgOz9auvyJrgcz9ym6p9l8KlS/pSKaMyERKP7FB72EpHZBUgbPGtkC8nv7oiEpiMszEw9JSwukOBBCdtBnjT6Xvk4CJUd8lX+Eg5rVhqkEqSvaPuDpPEVHFB6GqilF2o4avm7OGaphGP7fWmN714rA0rZ8rNxzTPdiTk88Wu1DYeeWd1w8RkNf8GGH30hbkRpsZ22UqKGDb00VxDgdArEeslkQOdFUGP9vtsqu4p79ps2e8Q0SA0ng8w9A=="
+}'
+```
+
+### Các bước implement
+
+- Tạo class mới và extend class NotifyController
+- Override method getBody - lấy json data từ request
+- Overrid method handleRequest - xử lí business logic
+- Mở rộng: Có thê override method notifyTransaction để xử lí toàn bộ business logic
+
+### Ví dụ
+
+- NodeJS
+
+```
+// NotifyController
+class Notify extends NotifyController {
+  public handleRequest(notifyRequest: Model.NotifyRequest): void {
+    // handle business logic
+  }
+}
+
+const notify = new Notify(
+  "5a404192-045b-4f6b-863f-192a0b9a88b4",
+  "022E0BF1076030B6E64127107CC1BA576F643E08D2617E93DEB1D13AB1443896",
+  "TZ4IYbmI6d/wvqMMCGV5u4CcE5+KDFJ+lTewp/LoRGDj94p6yFQ1k+/gMY1EXt9Tm80qRfu9BH+KCBoPwoIKs5WXKtsXpCa9vzmxcEyNW1qWwRpSWrNanOzpWRKzyZazWaziWu1A1TleeYYEUhhWZeqR42w2MX68Uu30n5tNGAwY5+Ctl1axCUzoNBC9czTXpzUNr/zIByW9RWW+BKJ6LNZv5V4HxzYesFmTTbcO9fgG5zTkTZ6s/H9n6NJ8UJFItOB5Rska7uYWmEDdkOx/5UGLrddjdHreYDIxUgTI5tHEwJM/1sXeM3N3rlqsJNBFqngA78PYypv6EUtNLFa9wQ=="
+);
+
+// Importing http module
+const http = require("http");
+
+const PORT = process.env.PORT || 3001;
+// Creating http Server
+const httpServer = http.createServer(function (
+  req: IncomingMessage,
+  res: ServerResponse
+) {
+  const url = req.url;
+  if (url?.includes("/notifyTransaction") && req.method === "POST") {
+    notify.notifyTransaction(req, res);
+  }
+});
+
+// Listening to http Server
+httpServer.listen(PORT, () => {
+  console.log(`Server is running at port ${PORT}...`);
+});
+
+```
+
+- NodeJS && ExpressJS
+
+```
+// Controller
+class Notify extends NotifyController {
+  getBody(request) {
+    // get json data
+    return new Promise((resolve) => {
+      resolve(JSON.stringify(request.body));
+    });
+  }
+  handleRequest(request) {
+    //Handle business logic
+  }
+}
+
+// Router
+const express = require("express");
+const router = express.Router();
+const { Notify } = require("../controller/NotifyController");
+const notify = new Notify(
+  "5a404192-045b-4f6b-863f-192a0b9a88b4",
+  "022E0BF1076030B6E64127107CC1BA576F643E08D2617E93DEB1D13AB1443896",
+  "TZ4IYbmI6d/wvqMMCGV5u4CcE5+KDFJ+lTewp/LoRGDj94p6yFQ1k+/gMY1EXt9Tm80qRfu9BH+KCBoPwoIKs5WXKtsXpCa9vzmxcEyNW1qWwRpSWrNanOzpWRKzyZazWaziWu1A1TleeYYEUhhWZeqR42w2MX68Uu30n5tNGAwY5+Ctl1axCUzoNBC9czTXpzUNr/zIByW9RWW+BKJ6LNZv5V4HxzYesFmTTbcO9fgG5zTkTZ6s/H9n6NJ8UJFItOB5Rska7uYWmEDdkOx/5UGLrddjdHreYDIxUgTI5tHEwJM/1sXeM3N3rlqsJNBFqngA78PYypv6EUtNLFa9wQ=="
+);
+router.use((req, res, next) => {
+  next();
+});
+
+router.post("/notifyTransaction", (req, res) => {
+  notify.notifyTransaction(req, res);
+});
+
 ```
 
 ## Response Code
