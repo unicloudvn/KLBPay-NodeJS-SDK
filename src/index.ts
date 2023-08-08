@@ -1,4 +1,4 @@
-import Payment from './controller/payment';
-import NotifyController from './controller/webhook';
+import Payment, { NotifyController } from './controller';
 import * as Model from './model';
-export { Payment, Model, NotifyController };
+import * as Service from './service';
+export { Payment, NotifyController, Model, Service };

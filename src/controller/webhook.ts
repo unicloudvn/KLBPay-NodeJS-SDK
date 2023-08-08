@@ -38,6 +38,8 @@ class NotifyController implements INotifyController {
 
     let body = '';
 
+    console.log(req);
+
     req.on('data', (chunk) => {
       body += chunk.toString();
     });
