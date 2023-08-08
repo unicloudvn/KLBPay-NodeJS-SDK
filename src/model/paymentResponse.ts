@@ -1,7 +1,10 @@
+import { ResponseCode } from '../constant';
+import CustomError from '../error/customError';
+
 type BaseResponse<T> = {
-  code: number;
-  data: T;
-  message: string;
+  code?: number;
+  data?: T | null;
+  message?: string;
 };
 
 type CreatePaymentResponse = {
@@ -32,5 +35,31 @@ type CheckPaymentResponse = {
 type CancelPaymentResponse = {
   status: boolean;
 };
+type NotifyResponse = {
+  success: boolean;
+};
 
-export { BaseResponse, CancelPaymentResponse, CheckPaymentResponse, CreatePaymentResponse };
+function SuccessResponse<T>(data: T): BaseResponse<T> {
+  return {
+    code: ResponseCode.SUCCESS.getCode(),
+    data: data,
+    message: ResponseCode.SUCCESS.getMessage(),
+  };
+}
+function BuildResponse<T>(data?: T, error?: CustomError): BaseResponse<T> {
+  return {
+    code: error?.getCode(),
+    data: data || null,
+    message: error?.getMessage(),
+  };
+}
+
+export {
+  BaseResponse,
+  CancelPaymentResponse,
+  CheckPaymentResponse,
+  CreatePaymentResponse,
+  NotifyResponse,
+  SuccessResponse,
+  BuildResponse,
+};
