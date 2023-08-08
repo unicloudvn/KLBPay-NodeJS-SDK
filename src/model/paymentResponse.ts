@@ -39,10 +39,10 @@ type NotifyResponse = {
   success: boolean;
 };
 
-function SuccessResponse<T>(data: T): BaseResponse<T> {
+function SuccessResponse<T>(data?: T): BaseResponse<T> {
   return {
     code: ResponseCode.SUCCESS.getCode(),
-    data: data,
+    data: data || null,
     message: ResponseCode.SUCCESS.getMessage(),
   };
 }
