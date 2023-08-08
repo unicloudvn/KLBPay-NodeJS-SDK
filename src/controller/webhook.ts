@@ -1,15 +1,18 @@
-import { AxiosRequestHeaders, HttpStatusCode } from 'axios';
-import { Request } from 'node-fetch';
+import { HttpStatusCode } from 'axios';
 import { ServerResponse, IncomingMessage } from 'http';
 import { X_API_CLIENT, X_API_TIME, X_API_VALIDATE } from '../constant';
-import { BodyEncryptRequest, NotifyRequest, NotifyResponse } from '../model';
+import { NotifyRequest, NotifyResponse } from '../model';
 import { Model } from '..';
 import KlbConfig from '../env';
 import KlbMessage from '../service/message';
 import Security from '../service/security';
-import CustomError from '../error/customError';
+import { SuccessResponse } from '../model/paymentResponse';
 
-class NotifyTransactionController {
+export interface INotifyController {
+  notifyTransaction: (req: IncomingMessage, res: ServerResponse) => void;
+  handleRequest: (notifyRequest: NotifyRequest) => void;
+}
+class NotifyController implements INotifyController {
   private readonly host: string;
   private readonly secretKey: string;
   private readonly clientId: string;
@@ -38,24 +41,32 @@ class NotifyTransactionController {
     req.on('data', (chunk) => {
       body += chunk.toString();
     });
-
-    res.writeHead(HttpStatusCode.Ok, { 'Content-Type': 'application/json' });
+    let notifyResponse: NotifyResponse;
     req.on('end', () => {
       try {
+        // handle request
         const bodyEncrypt: Model.BodyEncryptRequest = JSON.parse(body);
-        console.log('data: ', bodyEncrypt.data);
-        this.processNotifyTransactionRequest(new KlbMessage(clientId, timestamp, validate, bodyEncrypt.data));
-        const response: NotifyResponse = { success: true };
-
-        res.end(JSON.stringify(response));
+        const messageRequest = new KlbMessage(clientId, timestamp, validate, bodyEncrypt.data);
+        const requestRaw: NotifyRequest = this.security.decode<NotifyRequest>(messageRequest);
+        this.handleRequest(requestRaw);
+        notifyResponse = { success: true };
       } catch (e) {
-        res.end(JSON.stringify(e));
+        notifyResponse = { success: false };
       }
+
+      // handle reponse
+      const messageResponse: KlbMessage = this.security.encode(notifyResponse);
+      res.writeHead(HttpStatusCode.Ok, {
+        'Content-Type': 'application/json',
+        'x-api-client': messageResponse.clientId,
+        'x-api-validate': messageResponse.signature,
+        'x-api-time': messageResponse.timestamp,
+      });
+      res.end(JSON.stringify(SuccessResponse(messageResponse.encryptedData)));
     });
   }
-  private processNotifyTransactionRequest(message: KlbMessage) {
-    const requestRaw: NotifyRequest = this.security.decode<NotifyRequest>(message);
-    console.log(requestRaw);
+  public handleRequest(notifyRequest: NotifyRequest) {
+    // TODO: handle logic business - example: console.log(notifyRequest);
   }
 }
-export default NotifyTransactionController;
+export default NotifyController;
