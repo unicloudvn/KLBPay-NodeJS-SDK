@@ -358,74 +358,18 @@ router.post("/notifyTransaction", (req, res) => {
 
 ## Response Code
 
-<table>
-    <thead>
-    <tr>
-        <th style="width: 100px; text-align: center">Code</th>
-        <th style="width: 300px; text-align: center">Message</th>
-        <th style="width: 300px; text-align: center">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: center">0</td>
-        <td style="text-align: center">SUCCESS</td>
-        <td style="text-align: center">Thành công</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1</td>
-        <td style="text-align: center">FAILED</td>
-        <td style="text-align: center">Thất bại</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">2</td>
-        <td style="text-align: center">INVALID_PARAM</td>
-        <td style="text-align: center">Tham số không hợp lệ</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1601</td>
-        <td style="text-align: center">PAYMENT_SECURITY_VIOLATION</td>
-        <td style="text-align: center">Vi phạm bảo mật</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1602</td>
-        <td style="text-align: center">PAYMENT_ORDER_COMPLETED</td>
-        <td style="text-align: center">Giao dịch đã được thanh toán</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1603</td>
-        <td style="text-align: center">PAYMENT_AMOUNT_INVALID</td>
-        <td style="text-align: center">Số tiền không hợp lệ</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1604</td>
-        <td style="text-align: center">PAYMENT_TRANSACTION_CANCELED</td>
-        <td style="text-align: center">Giao dịch đã bị huỷ</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1605</td>
-        <td style="text-align: center">PAYMENT_TRANSACTION_EXPIRED</td>
-        <td style="text-align: center">Giao dịch đã hết hạn</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1606</td>
-        <td style="text-align: center">PAYMENT_TRANSACTION_INVALID</td>
-        <td style="text-align: center">Giao dịch không hợp lệ</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1607</td>
-        <td style="text-align: center">PAYMENT_TRANSACTION_FAILED</td>
-        <td style="text-align: center">Giao dịch thất bại</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1608</td>
-        <td style="text-align: center">PAYMENT_SERVICE_UNAVAILABLE</td>
-        <td style="text-align: center">Dịch vụ không khả dụng</td>
-    </tr>
-    <tr>
-        <td style="text-align: center">1609</td>
-        <td style="text-align: center">PAYMENT_INVALID_CLIENT_ID</td>
-        <td style="text-align: center">Mã khách hàng không hợp lệ</td>
-    </tr>
-    </tbody>
-</table>
+```
+  PAYMENT_SECURITY_VIOLATION = new ResponseCode(1601, 'Security violation');
+  PAYMENT_CLIENT_ID_INVALID = new ResponseCode(1602, 'Invalid client id');
+  PAYMENT_INVALID_TRANSACTION_ID = new ResponseCode(1603, 'Invalid transactionId');
+  DUPLICATE_REFERENCE_TRANSACTION_ID = new ResponseCode(1604, 'Duplicate ref transaction id');
+  PAYMENT_TYPE_INVALID = new ResponseCode(1605, 'Invalid payment type');
+  PAYMENT_INVALID_DATA = new ResponseCode(1606, 'Invalid data');
+  PAYMENT_ORDER_COMPLETED = new ResponseCode(1607, 'Order was completed');
+  PAYMENT_TRANSACTION_TIMEOUT = new ResponseCode(1608, 'Scan QR code timeout');
+  PAYMENT_TRANSACTION_CANCELED = new ResponseCode(1609, 'Canceled transaction');
+  PAYMENT_TRANSACTION_EXPIRED = new ResponseCode(1610, 'Transaction expired');
+  PAYMENT_TRANSACTION_FAILED = new ResponseCode(1611, 'Transaction failed');
+  PAYMENT_SERVICE_UNAVAILABLE = new ResponseCode(1612, 'Service unavailable');
+  PAYMENT_TRANSACTION_STATUS_INVALID = new ResponseCode(1613, 'Invalid transaction status');
+```

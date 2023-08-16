@@ -34,9 +34,6 @@ export default class Security {
     timestamp: number,
     secretKey: string,
   ): boolean {
-    if (timestamp > Math.floor(Date.now())) {
-      return false;
-    }
     const sign = this.genarateSign(data, clientId, timestamp, secretKey);
     if (dataValidate !== sign) {
       return false;
@@ -68,8 +65,8 @@ export default class Security {
   public decode<T>(message: KlbMessage): T {
     if (message.clientId !== this.clientId) {
       throw new CustomError(
-        ResponseCode.PAYMENT_INVALID_CLIENT_ID.getCode(),
-        ResponseCode.PAYMENT_INVALID_CLIENT_ID.getMessage(),
+        ResponseCode.PAYMENT_CLIENT_ID_INVALID.getCode(),
+        ResponseCode.PAYMENT_CLIENT_ID_INVALID.getMessage(),
       );
     }
     const checkTime: number = Math.floor(Date.now()) - message.timestamp;
