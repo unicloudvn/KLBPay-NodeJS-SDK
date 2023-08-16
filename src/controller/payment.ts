@@ -24,7 +24,7 @@ export default class Payment {
     this.clientId = clientId || KlbConfig.clientId;
     this.encryptKey = encryptKey || KlbConfig.encryptKey;
     this.secretKey = secretKey || KlbConfig.secretKey;
-    this.maxTimestampDiff = maxTimestampDiff || 3000;
+    this.maxTimestampDiff = maxTimestampDiff || 60000;
     this.security = new Security(clientId, encryptKey, secretKey, host, maxTimestampDiff);
   }
 
