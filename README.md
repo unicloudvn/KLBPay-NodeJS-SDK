@@ -8,7 +8,7 @@ Tạo file .npmrc trong thư mục root với nội dung bên dưới:
 
 ```
 @unicloudvn:registry=https://npm.pkg.github.com/unicloudvn
-//npm.pkg.github.com/:_authToken=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
+//npm.pkg.github.com/:_authToken=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
 ```
 
 Sau đó tiến hành cài đặt
