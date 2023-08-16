@@ -45,7 +45,7 @@ class NotifyController implements INotifyController {
       const bodyEncrypt: Model.BodyEncryptRequest = JSON.parse(body);
       const messageRequest = new KlbMessage(clientId, timestamp, validate, bodyEncrypt.data);
       const requestRaw: NotifyRequest = this.security.decode<NotifyRequest>(messageRequest);
-      this.handleRequest(requestRaw);
+      await this.handleRequest(requestRaw);
       notifyResponse = { success: true };
     } catch (e) {
       notifyResponse = { success: false };
@@ -61,7 +61,7 @@ class NotifyController implements INotifyController {
     });
     res.end(JSON.stringify(SuccessResponse(messageResponse.encryptedData)));
   }
-  public handleRequest(notifyRequest: NotifyRequest) {
+  public async handleRequest(notifyRequest: NotifyRequest) {
     // TODO: handle logic business - example: console.log(notifyRequest);
   }
   public getBody(request: IncomingMessage) {
