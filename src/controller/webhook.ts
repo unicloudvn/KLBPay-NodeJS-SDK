@@ -52,7 +52,7 @@ class NotifyController implements INotifyController {
       notifyResponse = { success: false };
     }
 
-    // handle reponse
+    // handle response
     const messageResponse: KlbMessage = this.security.encode(notifyResponse);
     res.writeHead(HttpStatusCode.Ok, {
       'Content-Type': 'application/json',

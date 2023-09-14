@@ -1,4 +1,4 @@
-import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
+import { createCipheriv, createDecipheriv, createHmac } from 'crypto';
 import KlbMessage from './message';
 import CustomError from '../error/customError';
 import { ResponseCode } from '../constant';
@@ -19,7 +19,7 @@ export default class Security {
     this.maxTimestampDiff = maxTimestampDiff || 3000;
   }
 
-  public genarateSign(data: string, clientId: string, timestamp: number, secretKey: string): string {
+  public generateSign(data: string, clientId: string, timestamp: number, secretKey: string): string {
     const message = `${clientId}|${timestamp}|${data}`;
     const alg = 'sha256';
     const cipher = createHmac(alg, secretKey);
@@ -34,11 +34,9 @@ export default class Security {
     timestamp: number,
     secretKey: string,
   ): boolean {
-    const sign = this.genarateSign(data, clientId, timestamp, secretKey);
-    if (dataValidate !== sign) {
-      return false;
-    }
-    return true;
+    const sign = this.generateSign(data, clientId, timestamp, secretKey);
+    return dataValidate === sign;
+
   }
 
   public encode<T>(data: T): KlbMessage {
@@ -51,8 +49,8 @@ export default class Security {
     try {
       const timestamp: number = Math.floor(Date.now());
       const dataConvert = JSON.stringify(data);
-      const payload = this.aseEcrypt(dataConvert, this.encryptKey);
-      const apiValidate = this.genarateSign(payload, this.clientId, timestamp, this.secretKey);
+      const payload = this.aesEncrypt(dataConvert, this.encryptKey);
+      const apiValidate = this.generateSign(payload, this.clientId, timestamp, this.secretKey);
       return new KlbMessage(this.clientId, timestamp, apiValidate, payload);
     } catch (e) {
       throw new CustomError(
@@ -85,9 +83,8 @@ export default class Security {
         this.secretKey,
       );
       if (validDate) {
-        const dateDecrypt = this.aseDecrypt(message.encryptedData, this.encryptKey);
-        const result: T = JSON.parse(dateDecrypt);
-        return result;
+        const dateDecrypt = this.aesDecrypt(message.encryptedData, this.encryptKey);
+        return JSON.parse(dateDecrypt);
       }
     } catch (e) {
       throw new CustomError(
@@ -101,7 +98,7 @@ export default class Security {
     );
   }
 
-  private aseEcrypt(data: string, encryptKey: string) {
+  private aesEncrypt(data: string, encryptKey: string) {
     let alg = 'aes-256-cbc';
     const key = Buffer.from(encryptKey, 'hex');
     if (key.length >= 4 && key.length <= 16) {
@@ -113,7 +110,7 @@ export default class Security {
     return encrypt;
   }
 
-  private aseDecrypt(data: string, encryptKey: string) {
+  private aesDecrypt(data: string, encryptKey: string) {
     let alg = 'aes-256-cbc';
     const key = Buffer.from(encryptKey, 'hex');
     if (key.length >= 4 && key.length <= 16) {

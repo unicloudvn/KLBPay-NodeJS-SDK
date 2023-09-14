@@ -35,6 +35,62 @@ type NotifyResponse = {
   success: boolean;
 };
 
+type CheckAccountNoResponse = {
+  accountNo?: string;
+  accountName?: string;
+};
+
+
+type LinkAccountResponse = {
+  accountNo: string;
+  accountName: string;
+  phone: string;
+  expireTime: number;
+  sessionId: string;
+};
+
+type VerifyLinkAccountResponse = {
+  success: boolean;
+}
+type DisableVirtualAccountResponse = {
+  success: boolean;
+}
+
+type EnableVirtualAccountResponse = {
+  order: boolean;
+  virtualAccount: string;
+  bankAccountNo: string;
+  fixAmount: string;
+  fixContent: string;
+  qrContent: string;
+  timeout: string;
+}
+
+type GetTransactionResponse = {
+  id: string;
+  status: string;
+  amount: number;
+  refTransactionId?: string;
+  createDateTime: string;
+  completeTime: string;
+  virtualAccount: string;
+  description: string;
+  paymentType: string;
+  txnNumber: string;
+  accountName: string;
+  accountNo: string;
+  interBankTrace: string;
+}
+
+type PageResponse = {
+  items: GetTransactionResponse[];
+  pageNumber: number;
+  pageSize: number;
+  totalPage: number;
+  totalSize: number;
+}
+
+
 function SuccessResponse<T>(data?: T): BaseResponse<T> {
   return {
     code: ResponseCode.SUCCESS.getCode(),
@@ -57,6 +113,13 @@ export {
   CheckPaymentResponse,
   CreatePaymentResponse,
   NotifyResponse,
+  CheckAccountNoResponse,
+  LinkAccountResponse,
+  VerifyLinkAccountResponse,
+  EnableVirtualAccountResponse,
+  DisableVirtualAccountResponse,
+  GetTransactionResponse,
+  PageResponse,
   SuccessResponse,
   BuildResponse,
 };

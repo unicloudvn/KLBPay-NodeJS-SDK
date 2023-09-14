@@ -4,6 +4,12 @@ import {
   CreatePaymentRequest,
   BodyEncryptRequest,
   NotifyRequest,
+  CheckAccountNoRequest,
+  LinkAccountRequest,
+  VerifyLinkAccountRequest,
+  EnableVirtualAccountRequest,
+  DisableVirtualAccountRequest,
+  GetTransactionRequest,
 } from './paymentRequest';
 import {
   BaseResponse,
@@ -11,6 +17,13 @@ import {
   CheckPaymentResponse,
   CreatePaymentResponse,
   NotifyResponse,
+  CheckAccountNoResponse,
+  LinkAccountResponse,
+  VerifyLinkAccountResponse,
+  EnableVirtualAccountResponse,
+  DisableVirtualAccountResponse,
+  GetTransactionResponse,
+  PageResponse
 } from './paymentResponse';
 
 export {
@@ -24,4 +37,17 @@ export {
   CancelPaymentResponse,
   NotifyResponse,
   BaseResponse,
+  CheckAccountNoRequest,
+  LinkAccountRequest,
+  VerifyLinkAccountRequest,
+  EnableVirtualAccountRequest,
+  DisableVirtualAccountRequest,
+  GetTransactionRequest,
+  CheckAccountNoResponse,
+  LinkAccountResponse,
+  VerifyLinkAccountResponse,
+  EnableVirtualAccountResponse,
+  DisableVirtualAccountResponse,
+  GetTransactionResponse,
+  PageResponse
 };

@@ -7,9 +7,9 @@ import KlbMessage from '../service/message';
 import KlbConfig from '../env';
 import * as Model from '../model';
 
-const ENDPOINT_CREATE = '/api/payment/v1/create';
-const ENDPOINT_CHECK = '/api/payment/v1/check';
-const ENDPOINT_CANCEL = '/api/payment/v1/cancel';
+const ENDPOINT_CHECK_ACCOUNT_NO = '/api/openBanking/v1/checkAccountNo';
+const ENDPOINT_LINK_ACCOUNT = '/api/openBanking/v1/linkAccount';
+const ENDPOINT_LINK_ACCOUNT_VERIFY = '/api/openBanking/v1/linkAccount/verify';
 
 export default class Payment {
   private readonly host: string;
@@ -57,18 +57,18 @@ export default class Payment {
     return this.security.decode<S>(messageResponse);
   }
 
-  public async create(data: Model.CreatePaymentRequest) {
-    const url = this.host + ENDPOINT_CREATE;
-    return await this.execute<Model.CreatePaymentRequest, Model.CreatePaymentResponse>(url, data);
+  public async checkAccountNo(data: Model.CheckAccountNoRequest) {
+    const url = this.host + ENDPOINT_CHECK_ACCOUNT_NO;
+    return await this.execute<Model.CheckAccountNoRequest, Model.CheckAccountNoResponse>(url, data);
   }
 
-  public async check(data: Model.CheckPaymentRequest) {
-    const url = this.host + ENDPOINT_CHECK;
-    return this.execute<Model.CheckPaymentRequest, Model.CheckPaymentResponse>(url, data);
+  public async linkAccountNo(data: Model.LinkAccountRequest) {
+    const url = this.host + ENDPOINT_LINK_ACCOUNT;
+    return this.execute<Model.LinkAccountRequest, Model.LinkAccountResponse>(url, data);
   }
 
-  public async cancel(data: Model.CancelPaymentRequest) {
-    const url = this.host + ENDPOINT_CANCEL;
-    return this.execute<Model.CancelPaymentRequest, Model.CancelPaymentResponse>(url, data);
+  public async verifyLinkAccountNo(data: Model.VerifyLinkAccountRequest) {
+    const url = this.host + ENDPOINT_LINK_ACCOUNT_VERIFY;
+    return this.execute<Model.VerifyLinkAccountRequest, Model.VerifyLinkAccountResponse>(url, data);
   }
 }
