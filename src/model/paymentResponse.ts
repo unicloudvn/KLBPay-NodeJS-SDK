@@ -42,6 +42,7 @@ function SuccessResponse<T>(data?: T): BaseResponse<T> {
     message: ResponseCode.SUCCESS.getMessage(),
   };
 }
+
 function BuildResponse<T>(data?: T, error?: CustomError): BaseResponse<T> {
   return {
     code: error?.getCode(),

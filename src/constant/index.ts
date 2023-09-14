@@ -22,7 +22,8 @@ class ResponseCode {
   static readonly PAYMENT_SERVICE_UNAVAILABLE = new ResponseCode(1612, 'Service unavailable');
   static readonly PAYMENT_TRANSACTION_STATUS_INVALID = new ResponseCode(1613, 'Invalid transaction status');
 
-  private constructor(private readonly code: number, private readonly message: string) {}
+  private constructor(private readonly code: number, private readonly message: string) {
+  }
 
   public getCode(): number {
     return this.code;

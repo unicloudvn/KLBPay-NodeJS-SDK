@@ -14,12 +14,15 @@ export default class KlbMessage {
   get clientId(): string {
     return this._clientId;
   }
+
   get timestamp(): number {
     return this._timestamp;
   }
+
   get signature(): string {
     return this._signature;
   }
+
   get encryptedData(): string {
     return this._encryptedData;
   }
