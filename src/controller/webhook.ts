@@ -13,6 +13,7 @@ export interface INotifyController {
   getBody: (req: IncomingMessage) => Promise<string>;
   handleRequest: (notifyRequest: NotifyRequest) => void;
 }
+
 class NotifyController implements INotifyController {
   private readonly host: string;
   private readonly secretKey: string;
@@ -51,7 +52,7 @@ class NotifyController implements INotifyController {
       notifyResponse = { success: false };
     }
 
-    // handle reponse
+    // handle response
     const messageResponse: KlbMessage = this.security.encode(notifyResponse);
     res.writeHead(HttpStatusCode.Ok, {
       'Content-Type': 'application/json',
@@ -61,9 +62,11 @@ class NotifyController implements INotifyController {
     });
     res.end(JSON.stringify(SuccessResponse(messageResponse.encryptedData)));
   }
+
   public async handleRequest(notifyRequest: NotifyRequest) {
     // TODO: handle logic business - example: console.log(notifyRequest);
   }
+
   public getBody(request: IncomingMessage) {
     return new Promise<string>((resolve) => {
       let bodyParts: string = '';
@@ -77,4 +80,5 @@ class NotifyController implements INotifyController {
     });
   }
 }
+
 export default NotifyController;

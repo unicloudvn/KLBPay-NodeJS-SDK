@@ -5,11 +5,16 @@
     "declaration": true,
     "outDir": "./lib",
     "strict": true
-    },
-    "include": ["src", "index.ts"],
-    "exclude": ["node_modules"],
-    "ts-node": {
-      // Tell ts-node CLI to install the --loader automatically
-      "esm": true
   },
+  "include": [
+    "src",
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "ts-node": {
+    // Tell ts-node CLI to install the --loader automatically
+    "esm": true
+  }
 }

@@ -44,4 +44,51 @@ type NotifyRequest = {
   transferDesc?: string;
   time?: string;
 };
-export { CancelPaymentRequest, CheckPaymentRequest, CreatePaymentRequest, BodyEncryptRequest, NotifyRequest };
+
+type CheckAccountNoRequest = {
+  accountNo: string;
+}
+
+type LinkAccountRequest = {
+  accountNo: string;
+}
+type VerifyLinkAccountRequest = {
+  sessionId: string;
+  accountNo: string;
+  otp: string;
+};
+
+type DisableVirtualAccountRequest = {
+  order: number;
+};
+
+type EnableVirtualAccountRequest = {
+  order: number;
+  timeout: number;
+  fixAmount: number;
+  fixContent?: string;
+  bankAccountNo?: string;
+};
+
+type GetTransactionRequest = {
+  size?: number;
+  page?: number;
+  order?: number;
+  bankAccountNo?: string;
+  fromDate?: string;
+  toDate: string;
+}
+
+export {
+  CancelPaymentRequest,
+  CheckPaymentRequest,
+  CreatePaymentRequest,
+  BodyEncryptRequest,
+  NotifyRequest,
+  CheckAccountNoRequest,
+  LinkAccountRequest,
+  VerifyLinkAccountRequest,
+  EnableVirtualAccountRequest,
+  DisableVirtualAccountRequest,
+  GetTransactionRequest,
+};

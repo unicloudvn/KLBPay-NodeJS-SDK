@@ -21,8 +21,13 @@ class ResponseCode {
   static readonly PAYMENT_TRANSACTION_FAILED = new ResponseCode(1611, 'Transaction failed');
   static readonly PAYMENT_SERVICE_UNAVAILABLE = new ResponseCode(1612, 'Service unavailable');
   static readonly PAYMENT_TRANSACTION_STATUS_INVALID = new ResponseCode(1613, 'Invalid transaction status');
+  static readonly PAYMENT_ACCESS_DENIED = new ResponseCode(1614, 'Access denied');
+  static readonly MIDDLEWARE_EXISTED_OTP = new ResponseCode(100014, 'Existed OTP');
+  static readonly MIDDLEWARE_INVALID_OTP = new ResponseCode(100015, 'Invalid OTP');
+  static readonly BENEFICIARY_NOT_EXISTED = new ResponseCode(5100000, 'Beneficiary not existed');
 
-  private constructor(private readonly code: number, private readonly message: string) {}
+  private constructor(private readonly code: number, private readonly message: string) {
+  }
 
   public getCode(): number {
     return this.code;

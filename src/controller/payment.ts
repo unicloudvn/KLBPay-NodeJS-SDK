@@ -11,6 +11,14 @@ const ENDPOINT_CREATE = '/api/payment/v1/create';
 const ENDPOINT_CHECK = '/api/payment/v1/check';
 const ENDPOINT_CANCEL = '/api/payment/v1/cancel';
 
+const ENDPOINT_CHECK_ACCOUNT_NO = '/api/openBanking/v1/checkAccountNo';
+const ENDPOINT_LINK_ACCOUNT = '/api/openBanking/v1/linkAccount';
+const ENDPOINT_LINK_ACCOUNT_VERIFY = '/api/openBanking/v1/linkAccount/verify';
+
+const ENDPOINT_ENABLE_VIRTUAL_ACCOUNT = '/api/payment/v1/virtualAccount/enable';
+const ENDPOINT_DISABLE_VIRTUAL_ACCOUNT = '/api/payment/v1/virtualAccount/disable';
+const ENDPOINT_GET_TRANSACTION = '/api/payment/v1/getTransaction';
+
 export default class Payment {
   private readonly host: string;
   private readonly secretKey: string;
@@ -28,7 +36,7 @@ export default class Payment {
     this.security = new Security(clientId, encryptKey, secretKey, host, maxTimestampDiff);
   }
 
-  private async excute<T, S>(url: string, data: T): Promise<S> {
+  private async execute<T, S>(url: string, data: T): Promise<S> {
     const message = this.security.encode(data);
     const response = await axios.post(
       url,
@@ -59,16 +67,46 @@ export default class Payment {
 
   public async create(data: Model.CreatePaymentRequest) {
     const url = this.host + ENDPOINT_CREATE;
-    return await this.excute<Model.CreatePaymentRequest, Model.CreatePaymentResponse>(url, data);
+    return await this.execute<Model.CreatePaymentRequest, Model.CreatePaymentResponse>(url, data);
   }
 
   public async check(data: Model.CheckPaymentRequest) {
     const url = this.host + ENDPOINT_CHECK;
-    return this.excute<Model.CheckPaymentRequest, Model.CheckPaymentResponse>(url, data);
+    return this.execute<Model.CheckPaymentRequest, Model.CheckPaymentResponse>(url, data);
   }
 
   public async cancel(data: Model.CancelPaymentRequest) {
     const url = this.host + ENDPOINT_CANCEL;
-    return this.excute<Model.CancelPaymentRequest, Model.CancelPaymentResponse>(url, data);
+    return this.execute<Model.CancelPaymentRequest, Model.CancelPaymentResponse>(url, data);
+  }
+
+  public async enableVirtualAccount(data: Model.EnableVirtualAccountRequest) {
+    const url = this.host + ENDPOINT_ENABLE_VIRTUAL_ACCOUNT;
+    return await this.execute<Model.EnableVirtualAccountRequest, Model.EnableVirtualAccountResponse>(url, data);
+  }
+
+  public async disableVirtualAccount(data: Model.DisableVirtualAccountRequest) {
+    const url = this.host + ENDPOINT_DISABLE_VIRTUAL_ACCOUNT;
+    return this.execute<Model.DisableVirtualAccountRequest, Model.DisableVirtualAccountResponse>(url, data);
+  }
+
+  public async getTransaction(data: Model.GetTransactionRequest) {
+    const url = this.host + ENDPOINT_GET_TRANSACTION;
+    return this.execute<Model.GetTransactionRequest, Model.PageResponse>(url, data);
+  }
+
+  public async checkAccountNo(data: Model.CheckAccountNoRequest) {
+    const url = this.host + ENDPOINT_CHECK_ACCOUNT_NO;
+    return await this.execute<Model.CheckAccountNoRequest, Model.CheckAccountNoResponse>(url, data);
+  }
+
+  public async linkAccountNo(data: Model.LinkAccountRequest) {
+    const url = this.host + ENDPOINT_LINK_ACCOUNT;
+    return this.execute<Model.LinkAccountRequest, Model.LinkAccountResponse>(url, data);
+  }
+
+  public async verifyLinkAccountNo(data: Model.VerifyLinkAccountRequest) {
+    const url = this.host + ENDPOINT_LINK_ACCOUNT_VERIFY;
+    return this.execute<Model.VerifyLinkAccountRequest, Model.VerifyLinkAccountResponse>(url, data);
   }
 }
