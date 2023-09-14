@@ -32,6 +32,8 @@ Thông tin tích hợp bao gồm: Host, ClientId, SecretKey, EncryptKey
 
 ```
 import {Payment} from 'kpay-nodejs-sdk';
+Hoặc
+import {Payment} from "@unicloudvn/kpay-nodejs-sdk";
 ```
 
 ## Ví dụ cơ bản
