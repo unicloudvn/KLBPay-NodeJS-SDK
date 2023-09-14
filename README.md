@@ -356,6 +356,216 @@ router.post("/notifyTransaction", (req, res) => {
 
 ```
 
+### Tạo tài khoản ảo:  Model.EnableVirtualAccountRequest
+
+#### Request data
+
+```
+const data: Model.EnableVirtualAccountRequest = {
+    order: 8888,
+    timeout:8888,
+    fixAmount:500000,
+    fixContent: "Mo ta",
+    bankAccountNo: ""
+}
+
+const enableVirtualAccount = payment.enableVirtualAccount(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+        // handle error response
+})
+```
+
+#### Response data: Model.EnableVirtualAccountResponse
+
+```
+    {
+      "order": 8888,
+      "virtualAccount": "109399282792088884"
+      "bankAccountNo": "4570834602",
+      "fixAmount": 500000,
+      "fixContent": "Mo ta",
+      "qrContent": "00020101021238620010A0000007270132000697045201181093992827920888840208QRIBFTTA530370454065000005802VN62090805Mo ta63048959",
+      "timeout": 1000000,
+    }
+```
+
+### Hủy tài khoản ảo
+
+#### Request data: Model.DisableVirtualAccountRequest
+
+```
+const data: Model.DisableVirtualAccountRequest = {
+    order: 8888,
+}
+
+
+const disableVirtualAccount = payment.disableVirtualAccount(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+        // handle error response
+})
+```
+#### Response data: Model.DisableVirtualAccountResponse
+
+```
+    {
+        "success": true
+    }
+```
+
+### Lấy danh sách giao dịch
+
+#### Request data: Model.GetTransactionRequest
+
+```
+const data: Model.GetTransactionRequest = {
+    size: 10,
+    page: 0,
+    order: 8888,
+    bankAccountNo: "",
+    fromDate: "2023-07-10 00:00:00",
+    toDate: "2023-07-20 23:00:00"
+}
+
+
+const getTransaction = payment.getTransaction(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+        // handle error response
+})
+```
+
+#### Response data: Model.PageResponse
+
+```
+     {
+      "items": [
+        {
+          "id": "f22fcd1a-46fe-4f42-bc5f-8dc02915121e",
+          "status": "SUCCESS",
+          "amount": 100000,
+          "refTransactionId": "",
+          "createDateTime": "2023-07-19 17:30:20",
+          "completeTime": "2023-07-19 17:30:20",
+          "virtualAccount": "109399282792000020",
+          "description": "[109399282792000020.4570834602] Payme",
+          "paymentType": "VIET_QR",
+          "txnNumber": "P00000000353",
+          "accountName": "TRAN NGOC THANG",
+          "accountNo": "4570834602",
+          "interBankTrace": "057ZEXA2313500IW"
+        },
+        {
+          "id": "1b15b159-e8a2-4c84-8c20-4e620377f171",
+          "status": "SUCCESS",
+          "amount": 1000000,
+          "refTransactionId": "",
+          "createDateTime": "2023-07-19 17:12:16",
+          "completeTime": "2023-07-19 17:12:16",
+          "virtualAccount": "109399282792000020",
+          "description": "[109399282792000020.4570834602] Payme",
+          "paymentType": "VIET_QR",
+          "txnNumber": "P00000000351",
+          "accountName": "TRAN NGOC THANG",
+          "accountNo": "4570834602",
+          "interBankTrace": "057ZEXA2313500IV"
+        }
+      ],
+      "pageNumber": 0,
+      "pageSize": 10,
+      "totalPage": 1,
+      "totalSize": 2
+    }
+```
+### Kiểm tra tài khoản
+
+#### Request data: Model.CheckAccountNoRequest
+
+
+```
+const data: Model.CheckAccountNoRequest = {
+    accountNo:"77417777"
+}
+
+
+const checkAccountNo = payment.checkAccountNo(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+        // handle error response
+})
+```
+#### Response data: Model.CheckAccountNoResponse
+
+```
+    {
+        "accountNo": "77417777",
+        "accountName": "TRAN THANH LOC"
+    }
+```
+
+### Liên kết tài khoản
+
+#### Request data: Model.LinkAccountRequest
+
+```
+const data: Model.LinkAccountRequest = {
+    accountNo:"77417777"
+}
+
+
+const linkAccountNo = payment.linkAccountNo(data).then(res => {
+    // handle success response
+})
+.catch(err => {
+        // handle error response
+})
+```
+#### Response data: Model.LinkAccountResponse
+
+```
+    {
+        "accountNo": "77417777",
+        "accountName": "TRAN THANH LOC",
+        "phone": "0326577774",
+        "expireTime": 60,
+        "sessionId": "49c02a62-f65f-4f75-9697-f64744de37ad",
+    }
+```
+### Xác nhận liên kết tài khoản
+
+#### Request data: Model.VerifyLinkAccountRequest
+
+```
+const data: Model.VerifyLinkAccountRequest = {
+    sessionId:"49c02a62-f65f-4f75-9697-f64744de37ad",
+    accountNo:"77417777",
+    otp:"468158",
+}
+
+
+const verifyLinkAccount = payment.verifyLinkAccountNo(data).then(res => {
+    // handle success response
+})
+    .catch(err => {
+        // handle error response
+    })
+```
+#### Response data: Model.VerifyLinkAccountResponse
+
+```
+    {
+        "success": true
+    }
+```
+
+
+
+
 ## Response Code
 
 ```
@@ -372,4 +582,8 @@ router.post("/notifyTransaction", (req, res) => {
   PAYMENT_TRANSACTION_FAILED = new ResponseCode(1611, 'Transaction failed');
   PAYMENT_SERVICE_UNAVAILABLE = new ResponseCode(1612, 'Service unavailable');
   PAYMENT_TRANSACTION_STATUS_INVALID = new ResponseCode(1613, 'Invalid transaction status');
+  PAYMENT_ACCESS_DENIED = new ResponseCode(1614, 'Access denied');
+  MIDDLEWARE_EXISTED_OTP = new ResponseCode(100014, 'Existed OTP');
+  MIDDLEWARE_INVALID_OTP = new ResponseCode(100015, 'Invalid OTP');
+  BENEFICIARY_NOT_EXISTED = new ResponseCode(5100000, 'Beneficiary not existed');
 ```
